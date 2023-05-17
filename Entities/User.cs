@@ -6,5 +6,5 @@ public class User
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
 
-    public List<Test> Tests { get; set; } = null!;
+    public ICollection<Test> Tests { get; set; } = null!;
 }

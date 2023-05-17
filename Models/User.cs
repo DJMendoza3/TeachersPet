@@ -11,5 +11,5 @@ public class User
     [Required, MaxLength(50)]
     public string Email { get; set; } = null!;
 
-    public List<Test> Tests { get; set; } = null!;
+    public ICollection<Test> Tests { get; set; } = null!;
 }
