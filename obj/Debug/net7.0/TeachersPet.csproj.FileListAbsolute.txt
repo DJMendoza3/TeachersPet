@@ -63,3 +63,7 @@ C:\Users\dmand\Desktop\teachers-pet\TeachersPet\obj\Debug\net7.0\refint\Teachers
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\obj\Debug\net7.0\TeachersPet.pdb
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\obj\Debug\net7.0\TeachersPet.genruntimeconfig.cache
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\obj\Debug\net7.0\ref\TeachersPet.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Humanizer.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Mono.TextTemplating.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\System.CodeDom.dll
