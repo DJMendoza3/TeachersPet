@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TeachersPet.Models;
+using TeachersPet.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 //register the sqlite database
-builder.Services.AddDbContext<UserContext>(options => options.UseSqlite("Data Source=users.db"));
+builder.Services.AddDbContext<SiteContext>(options => options.UseSqlite("Data Source=users.db"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
