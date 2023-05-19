@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TeachersPet.Context;
 using TeachersPet.Entities;
+using TeachersPet.Models;
 
 namespace TeachersPet.Controllers;
 
@@ -21,17 +22,38 @@ public class UserController : Controller
     }
 
     [HttpPost("login")]
-    public JsonResult Login()
+    public async Task<ActionResult> Login(CredentialsDto credentials)
     {
-        return Json(new User { Name = "John Doe" });
+        if (await _context.Users.AnyAsync(u => u.UserName == credentials.Username) == false)
+            {
+                return BadRequest(Json("User not found"));
+            }
+        try
+        {
+            
+            User user = await _context.Users.FirstAsync(u => u.UserName == credentials.Username);
+
+            if (user.Password == credentials.Password)
+            {
+                //eventually this should return a token that can be used to authenticate the user
+                return Ok("User logged in");
+            }
+
+            return BadRequest(Json("Incorrect Password"));
+        } 
+        catch
+        {
+             return BadRequest(Json("Error logging in"));
+        }
+
+
     }
 
     [HttpPost("register")]
     public async Task<ActionResult> Register(User user)
     {
-        Console.WriteLine(user.Name);
-        HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-        if(await _context.Users.AnyAsync(u => u.Name == user.Name)) {
+        if (await _context.Users.AnyAsync(u => u.Name == user.Name))
+        {
             return BadRequest(Json("A user with name " + user.Name + " already exists"));
         }
         try
@@ -39,8 +61,8 @@ public class UserController : Controller
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return Ok("User created");
-        } 
-        catch 
+        }
+        catch
         {
             return BadRequest(Json("Error creating user"));
         }
