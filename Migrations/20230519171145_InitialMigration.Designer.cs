@@ -11,8 +11,8 @@ using TeachersPet.Context;
 namespace TeachersPet.Migrations
 {
     [DbContext(typeof(SiteContext))]
-    [Migration("20230517184417_ICollectionSwap")]
-    partial class ICollectionSwap
+    [Migration("20230519171145_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,11 +89,15 @@ namespace TeachersPet.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

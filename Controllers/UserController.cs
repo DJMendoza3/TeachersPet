@@ -23,15 +23,16 @@ public class UserController : Controller
     [HttpPost("login")]
     public JsonResult Login()
     {
-        return Json(new User { Id = 1, Name = "John Doe", Email = "test email" });
+        return Json(new User { Name = "John Doe" });
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register()
+    public async Task<ActionResult> Register(User user)
     {
-        User user = new User { Name = "John", Email = "Email@test.com" };
+        Console.WriteLine(user.Name);
+        HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
         if(await _context.Users.AnyAsync(u => u.Name == user.Name)) {
-            return BadRequest("A user with name " + user.Name + " already exists");
+            return BadRequest(Json("A user with name " + user.Name + " already exists"));
         }
         try
         {
@@ -41,19 +42,19 @@ public class UserController : Controller
         } 
         catch 
         {
-            return BadRequest("Error creating user");
+            return BadRequest(Json("Error creating user"));
         }
     }
 
     [HttpGet("refresh")]
     public JsonResult Refresh()
     {
-        return Json(new User { Id = 1, Name = "John Doe", Email = "test email" });
+        return Json(new User { Name = "John Doe" });
     }
     [HttpGet("logout")]
     public JsonResult Logout()
     {
-        return Json(new User { Id = 1, Name = "John Doe", Email = "test email" });
+        return Json(new User { Name = "John Doe" });
     }
 
 }

@@ -5,6 +5,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//Add CORS service 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
 builder.Services.AddControllers();
 //register the sqlite database
 builder.Services.AddDbContext<SiteContext>(options => options.UseSqlite("Data Source=users.db"));
@@ -21,7 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors();
 
 app.UseAuthorization();
 
