@@ -11,7 +11,7 @@ using TeachersPet.Context;
 namespace TeachersPet.Migrations
 {
     [DbContext(typeof(SiteContext))]
-    [Migration("20230519171145_InitialMigration")]
+    [Migration("20230519175553_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
