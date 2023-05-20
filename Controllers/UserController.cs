@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TeachersPet.Context;
 using TeachersPet.Entities;
 using TeachersPet.Models;
+using BC = BCrypt.Net.BCrypt;
 
 namespace TeachersPet.Controllers;
 
@@ -33,7 +34,7 @@ public class UserController : Controller
             
             User user = await _context.Users.FirstAsync(u => u.UserName == credentials.Username);
 
-            if (user.Password == credentials.Password)
+            if (BC.Verify(credentials.Password, user.Password))
             {
                 //eventually this should return a token that can be used to authenticate the user
                 return Ok(Json("User logged in"));
@@ -58,9 +59,10 @@ public class UserController : Controller
         }
         try
         {
+            user.Password = BC.HashPassword(user.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return Ok("User created");
+            return Ok(Json("User created"));
         }
         catch
         {
