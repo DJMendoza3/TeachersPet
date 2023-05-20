@@ -36,7 +36,7 @@ public class UserController : Controller
             if (user.Password == credentials.Password)
             {
                 //eventually this should return a token that can be used to authenticate the user
-                return Ok("User logged in");
+                return Ok(Json("User logged in"));
             }
 
             return BadRequest(Json("Incorrect Password"));

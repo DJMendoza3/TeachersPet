@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "5TkZbmu9rTZsXB76OHWXLqxUhw/pHSdwfAr10vhBL/6rjjp7fabaZm/WtLtNt/s8ksAkoXZ54I/X8gQZ0mROIw==",
+  "dgSpecHash": "px2HNpAzLGvP1ZPfp5cFu8Y12IlB6KiiecGTRpHeCpvkeUzehvnN3A7u14mENEePoy0R+DnwyxKvDOSem1Nx9A==",
   "success": true,
   "projectFilePath": "C:\\Users\\dmand\\Desktop\\teachers-pet\\TeachersPet\\TeachersPet.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\dmand\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.5\\microsoft.aspnetcore.openapi.7.0.5.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.5\\microsoft.data.sqlite.core.7.0.5.nupkg.sha512",
