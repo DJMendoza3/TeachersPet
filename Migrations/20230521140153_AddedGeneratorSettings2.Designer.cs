@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeachersPet.Context;
 
@@ -10,9 +11,11 @@ using TeachersPet.Context;
 namespace TeachersPet.Migrations
 {
     [DbContext(typeof(SiteContext))]
-    partial class SiteContextModelSnapshot : ModelSnapshot
+    [Migration("20230521140153_AddedGeneratorSettings2")]
+    partial class AddedGeneratorSettings2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
@@ -38,37 +41,6 @@ namespace TeachersPet.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Answer");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.GeneratorSettings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NumberOfAnswers")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NumberOfQuestions")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PercentageOfDifficulty")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Topic")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GeneratorSettings");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Question", b =>
