@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using TeachersPet.Context;
 using TeachersPet.Entities;
 using TeachersPet.Models;
@@ -36,8 +40,23 @@ public class UserController : Controller
 
             if (BC.Verify(credentials.Password, user.Password))
             {
-                //eventually this should return a token that can be used to authenticate the user
-                return Ok(Json("User logged in"));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                var claims = new List<Claim>();
+                claims.Add(new Claim("name", user.UserName));
+                claims.Add(new Claim("role", "user"));
+                
+                var token = new JwtSecurityToken(
+                    issuer: "https://localhost:5295",
+                    audience: "https://localhost:5173",
+                    claims: claims,
+                    expires: DateTime.Now.AddMinutes(30),
+                    signingCredentials: creds
+                );
+
+                var result = new JwtSecurityTokenHandler().WriteToken(token);
+                return Ok(result);
             }
 
             return BadRequest(Json("Incorrect Password"));

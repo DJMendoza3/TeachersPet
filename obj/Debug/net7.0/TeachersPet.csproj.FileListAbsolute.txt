@@ -68,3 +68,10 @@ C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.Entit
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Mono.TextTemplating.dll
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\System.CodeDom.dll
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\BCrypt.Net-Next.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\JWT.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll

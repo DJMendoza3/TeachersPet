@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TeachersPet.Entities;
 
@@ -12,6 +13,7 @@ public class User
     public string Name { get; set; } = null!;
     [Required]
     public string UserName { get; set; } = null!;
+    [JsonIgnore]
     public string Password { get; set; } = null!;
     public ICollection<Test> Tests { get; set; } = new List<Test>();
 }
