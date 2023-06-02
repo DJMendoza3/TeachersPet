@@ -7,6 +7,7 @@ using System.Text;
 using TeachersPet.Context;
 using TeachersPet.Entities;
 using TeachersPet.Models;
+using TeachersPet.Services;
 using BC = BCrypt.Net.BCrypt;
 
 namespace TeachersPet.Controllers;
@@ -19,25 +20,27 @@ public class UserController : Controller
 
     private readonly ILogger<UserController> _logger;
     private readonly SiteContext _context;
+    private readonly IUserRepository _userRepository;
 
-    public UserController(ILogger<UserController> logger, SiteContext context)
+    public UserController(ILogger<UserController> logger, SiteContext context, IUserRepository userRepository)
     {
         _logger = logger;
         _context = context;
+        _userRepository = userRepository;
     }
 
     [HttpPost("login")]
     public async Task<ActionResult> Login(CredentialsDto credentials)
     {
-        if (await _context.Users.AnyAsync(u => u.UserName == credentials.Username) == false)
-            {
-                return BadRequest(Json("User not found"));
-            }
+        if(!await _userRepository.UserExists(credentials.Username))
+        {
+            return BadRequest(Json("User does not exist"));
+        }
+
+        var user = await _userRepository.GetUser(credentials.Username);
+        
         try
         {
-            
-            User user = await _context.Users.FirstAsync(u => u.UserName == credentials.Username);
-
             if (BC.Verify(credentials.Password, user.Password))
             {
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
