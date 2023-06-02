@@ -28,10 +28,10 @@ namespace TeachersPet.Services
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> CreateUser(User user)
+        public User CreateUser(User user)
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            _context.Users.AddAsync(user);
+            _context.SaveChangesAsync();
             return user;
         }
 
