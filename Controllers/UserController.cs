@@ -43,23 +43,23 @@ public class UserController : Controller
         {
             if (BC.Verify(credentials.Password, user.Password))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+                // var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                var claims = new List<Claim>();
-                claims.Add(new Claim("name", user.UserName));
-                claims.Add(new Claim("role", "user"));
+                // var claims = new List<Claim>();
+                // claims.Add(new Claim("name", user.UserName));
+                // claims.Add(new Claim("role", "user"));
                 
-                var token = new JwtSecurityToken(
-                    issuer: "https://localhost:5295",
-                    audience: "https://localhost:5173",
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(30),
-                    signingCredentials: creds
-                );
+                // var token = new JwtSecurityToken(
+                //     issuer: "https://localhost:5295",
+                //     audience: "https://localhost:5173",
+                //     claims: claims,
+                //     expires: DateTime.Now.AddMinutes(30),
+                //     signingCredentials: creds
+                // );
 
-                var result = new JwtSecurityTokenHandler().WriteToken(token);
-                return Ok(result);
+                // var result = new JwtSecurityTokenHandler().WriteToken(token);
+                return Ok(Json("Logged in"));
             }
 
             return BadRequest(Json("Incorrect Password"));
