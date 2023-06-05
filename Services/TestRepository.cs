@@ -17,6 +17,10 @@ namespace TeachersPet.Services
         {
             return await _context.Tests.AnyAsync(t => t.TestName == testName);
         }
+        public async Task<bool> TestExists(int id)
+        {
+            return await _context.Tests.AnyAsync(t => t.Id == id);
+        }
 
         public async Task<Test> GetTest(string testName)
         {
@@ -28,7 +32,7 @@ namespace TeachersPet.Services
             return await _context.Tests.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<Test[]> GetTests()
+        public async Task<Test[]> GetTests(User user)
         {
             return await _context.Tests.ToArrayAsync();
         }
