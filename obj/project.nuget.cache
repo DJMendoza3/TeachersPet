@@ -1,14 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "7WeGg2Ns7xfpJoQsfRXzgd0OHhW92ZJvGu1bk4cq3nit52XkvelU0HljyVCIqUcWx9VOS0Sq0L+t7JWg8ZjrAg==",
+  "dgSpecHash": "tHOP7QqFmmCljGmNYcx0qXdvhYS+CifPaO8aZ8KFvogQS9t4gJ3pg2bO9QkpPMf7qu3AfClgaXGyP9lReq6sCw==",
   "success": true,
   "projectFilePath": "C:\\Users\\dmand\\Desktop\\teachers-pet\\TeachersPet\\TeachersPet.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\dmand\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\dmand\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\jwt\\10.0.2\\jwt.10.0.2.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.5\\microsoft.aspnetcore.openapi.7.0.5.nupkg.sha512",
-    "C:\\Users\\dmand\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\dmand\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.5\\microsoft.data.sqlite.core.7.0.5.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.5\\microsoft.entityframeworkcore.7.0.5.nupkg.sha512",
     "C:\\Users\\dmand\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.5\\microsoft.entityframeworkcore.abstractions.7.0.5.nupkg.sha512",

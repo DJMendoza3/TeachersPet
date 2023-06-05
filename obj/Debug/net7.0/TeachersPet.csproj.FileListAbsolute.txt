@@ -75,3 +75,5 @@ C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.Ident
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
