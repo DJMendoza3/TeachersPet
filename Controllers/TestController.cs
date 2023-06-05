@@ -51,35 +51,11 @@ namespace TeachersPet.Controllers
         }
 
         [HttpPost("test")]
-        public async Task<ActionResult> CreateTest()
+        public async Task<ActionResult> CreateTest(TestDto testDto)
         {
-            if(await _testRepository.TestExists("Test"))
-            {
-                return BadRequest();
-            }
-            var test = new Test
-            {
-                TestName = "Test",
-                Text = "Test",
-                Questions = new List<Question>
-                {
-                    new Question
-                    {
-                        Text = "Test",
-                        Answers = new List<Answer>
-                        {
-                            new Answer
-                            {
-                                Text = "Test",
-                                IsCorrect = true
-                            }
-                        }
-                    }
-                }
-
-            };
+            var test = Mapper.Map<Test>(testDto);
             await _testRepository.CreateTest(test);
-            return Ok(Json("Test"));
+            return Ok(Json("Test added successfully"));
         }
     }
 }

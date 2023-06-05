@@ -24,12 +24,13 @@ namespace TeachersPet.Services
 
         public async Task<Test> GetTest(string testName)
         {
-            return await _context.Tests.FirstOrDefaultAsync(t => t.TestName == testName);
+            //query tests including foreign key data
+            return await _context.Tests.Where(t => t.TestName == testName).Include(t => t.Questions).ThenInclude(q => q.Answers).FirstOrDefaultAsync();
         }
 
         public async Task<Test> GetTest(int id)
         {
-            return await _context.Tests.FirstOrDefaultAsync(t => t.Id == id);
+            return await _context.Tests.Where(t => t.Id == id).Include(t => t.Questions).ThenInclude(q => q.Answers).FirstOrDefaultAsync();
         }
 
         public async Task<Test[]> GetTests(User user)
@@ -39,7 +40,7 @@ namespace TeachersPet.Services
 
         public async Task<Test> CreateTest(Test test)
         {
-            _context.Tests.AddAsync(test);
+            await _context.Tests.AddAsync(test);
             await _context.SaveChangesAsync();
             return test;
         }
