@@ -77,3 +77,6 @@ C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.Ident
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\AutoMapper.dll
 C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\dmand\Desktop\teachers-pet\TeachersPet\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

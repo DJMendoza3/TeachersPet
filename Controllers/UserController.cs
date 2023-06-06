@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using TeachersPet.Context;
 using TeachersPet.Entities;
 using TeachersPet.Models;
@@ -21,16 +21,19 @@ public class UserController : Controller
     private readonly ILogger<UserController> _logger;
     private readonly SiteContext _context;
     private readonly IUserRepository _userRepository;
+    private readonly IConfiguration _configuration;
 
-    public UserController(ILogger<UserController> logger, SiteContext context, IUserRepository userRepository)
+    public UserController(ILogger<UserController> logger, SiteContext context, IUserRepository userRepository, IConfiguration configuration)
     {
         _logger = logger;
         _context = context;
         _userRepository = userRepository;
+        _configuration = configuration ?? 
+                throw new ArgumentNullException(nameof(configuration));
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login(CredentialsDto credentials)
+    public async Task<ActionResult<string>> Login(CredentialsDto credentials)
     {
         if(!await _userRepository.UserExists(credentials.Username))
         {
@@ -43,23 +46,33 @@ public class UserController : Controller
         {
             if (BC.Verify(credentials.Password, user.Password))
             {
-                // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-                // var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+               // Step 2: create a token
+            var securityKey = new SymmetricSecurityKey(
+                Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]));
+            var signingCredentials = new SigningCredentials(
+                securityKey, SecurityAlgorithms.HmacSha256);
+             
+            var claimsForToken = new List<Claim>();
+            claimsForToken.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+             
+            var jwtSecurityToken = new JwtSecurityToken(
+                _configuration["Jwt:Issuer"],
+                _configuration["Jwt:Audience"],
+                claimsForToken,
+                DateTime.UtcNow,
+                DateTime.UtcNow.AddHours(1),
+                signingCredentials);
+            var tokenToReturn = new JwtSecurityTokenHandler()
+               .WriteToken(jwtSecurityToken);
 
-                // var claims = new List<Claim>();
-                // claims.Add(new Claim("name", user.UserName));
-                // claims.Add(new Claim("role", "user"));
-                
-                // var token = new JwtSecurityToken(
-                //     issuer: "https://localhost:5295",
-                //     audience: "https://localhost:5173",
-                //     claims: claims,
-                //     expires: DateTime.Now.AddMinutes(30),
-                //     signingCredentials: creds
-                // );
-
-                // var result = new JwtSecurityTokenHandler().WriteToken(token);
-                return Ok(Json("Logged in"));
+            //append token to response as http only cookie
+            Response.Cookies.Append("token", tokenToReturn, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Secure = true
+            });
+            return Ok(Json("Logged in"));
             }
 
             return BadRequest(Json("Incorrect Password"));
@@ -93,6 +106,7 @@ public class UserController : Controller
     }
 
     [HttpGet("refresh")]
+    
     public JsonResult Refresh()
     {
         return Json(new User { Name = "John Doe" });

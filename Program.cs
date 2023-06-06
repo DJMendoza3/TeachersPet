@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TeachersPet.Context;
 using TeachersPet.Services;
 
@@ -17,6 +19,25 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+
+//Add authentication service
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]))
+            };
+        }
+    );
+
+
 
 //Add the user repository
 builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -37,7 +58,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+IConfiguration configuration = app.Configuration;
+
 app.UseCors();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

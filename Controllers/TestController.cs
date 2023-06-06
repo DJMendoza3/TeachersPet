@@ -5,11 +5,13 @@ using TeachersPet.Services;
 using TeachersPet.Models;
 using TeachersPet.Entities;
 using TeachersPet.Profiles;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TeachersPet.Controllers
 {
     [ApiController]
     [Route("api")]
+    [Authorize]
     public class TestController : Controller
     {
         private readonly SiteContext _context;
