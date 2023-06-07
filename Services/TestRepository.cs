@@ -26,6 +26,10 @@ namespace TeachersPet.Services
 
         public async Task<Test> GetTest(string testName)
         {
+            if (testName != null && !await TestExists(testName))
+            {
+                throw new ArgumentNullException(nameof(testName));
+            }
             //query tests including foreign key data
             return await _context.Tests.Where(t => t.TestName == testName).Include(t => t.Questions).ThenInclude(q => q.Answers).FirstOrDefaultAsync();
         }
@@ -37,45 +41,75 @@ namespace TeachersPet.Services
 
         public async Task<Test[]> GetTests(int userId)
         {
-           return await _context.Users.Where(u => u.Id == userId).Include(u => u.Tests).ThenInclude(t => t.Questions).ThenInclude(q => q.Answers).SelectMany(u => u.Tests).ToArrayAsync();
+            return await _context.Users.Where(u => u.Id == userId).Include(u => u.Tests).ThenInclude(t => t.Questions).ThenInclude(q => q.Answers).SelectMany(u => u.Tests).ToArrayAsync();
         }
 
         public async Task<Test> CreateTest(Test test, int userId)
         {
             var user = await _userRepository.GetUser(userId);
-            if(user == null)
+            if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            if(user.Tests == null)
+            if (user.Tests == null)
             {
                 user.Tests = new List<Test>();
-            }   
+            }
             user.Tests.Add(test);
             await _context.SaveChangesAsync();
             return test;
         }
 
-        public async Task<Test> UpdateTest(Test test)
+        public async Task<bool> UpdateTest(Test test)
         {
+            
             _context.Tests.Update(test);
             await _context.SaveChangesAsync();
-            return test;
+            return true;
         }
 
-        public async Task<Test> DeleteTest(Test test)
+        public async Task<bool> DeleteTest(Test test, int userId)
         {
+            var user = await _userRepository.GetUser(userId);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            if (test == null)
+            {
+                throw new ArgumentNullException(nameof(test));
+            }
+            //if the test is not in the user's list of tests, throw an exception
+            if (!user.Tests.Contains(test))
+            {
+                throw new ArgumentException("Test does not belong to user");
+            }
             _context.Tests.Remove(test);
             await _context.SaveChangesAsync();
-            return test;
+            return true;
         }
 
-        public async Task<Test> DeleteTest(int id)
+        public async Task<bool> DeleteTest(int id, int userId)
         {
+            var user = await _userRepository.GetUser(userId);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
             var test = await _context.Tests.FirstOrDefaultAsync(t => t.Id == id);
+            if (test == null)
+            {
+                throw new ArgumentNullException(nameof(test));
+            }
+            //if the test is not in the user's list of tests, throw an exception
+            if (!user.Tests.Contains(test))
+            {
+                throw new ArgumentException("Test does not belong to user");
+            }
             _context.Tests.Remove(test);
             await _context.SaveChangesAsync();
-            return test;
+
+            return true;
         }
 
         public async Task<bool> SaveChangesAsync()

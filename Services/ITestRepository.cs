@@ -10,8 +10,8 @@ namespace TeachersPet.Services
         Task<Test> GetTest(int id);
         Task<Test[]> GetTests(int userId);
         Task<Test> CreateTest(Test test, int userId);
-        Task<Test> UpdateTest(Test test);
-        Task<Test> DeleteTest(Test test);
-        Task<Test> DeleteTest(int id);
+        Task<bool> UpdateTest(Test test);
+        Task<bool> DeleteTest(Test test, int userId);
+        Task<bool> DeleteTest(int id, int userId);
     }
 }

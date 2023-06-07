@@ -17,6 +17,10 @@ namespace TeachersPet.Services
         {
             return await _context.Users.AnyAsync(u => u.UserName == username);
         }
+        public async Task<bool> UserOwnsTest(int userId, int testId)
+        {
+            return await _context.Users.Where(u => u.Id == userId).Include(u => u.Tests).SelectMany(u => u.Tests).AnyAsync(t => t.Id == testId);
+        }
 
         public async Task<User> GetUser(string username)
         {

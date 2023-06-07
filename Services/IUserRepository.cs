@@ -5,6 +5,7 @@ namespace TeachersPet.Services
     public interface IUserRepository
     {
         Task<bool> UserExists(string username);
+        Task<bool> UserOwnsTest(int userId, int testId);
         Task<User> GetUser(string username);
         Task<User> GetUser(int id);
         Task<User> CreateUser(User user);

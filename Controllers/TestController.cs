@@ -76,5 +76,32 @@ namespace TeachersPet.Controllers
             await _testRepository.CreateTest(test, int.Parse(userId));
             return Ok(Json("Test added successfully"));
         }
+
+        [HttpPut("test/{id}")]
+        public async Task<ActionResult> UpdateTest(TestDto testDto)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            if(!await _testRepository.TestExists(testDto.Id))
+            {
+                return NotFound();
+            }
+            if (!await _userRepository.UserExists(userId))
+            {
+                return Unauthorized();
+            }
+            if (!await _userRepository.UserOwnsTest(int.Parse(userId), testDto.Id))
+            {
+                return Unauthorized();
+            }
+            
+            var test = Mapper.Map<Test>(testDto);
+
+            await _testRepository.UpdateTest(test);
+            return Ok(Json("Test updated successfully"));
+        }
     }
 }
