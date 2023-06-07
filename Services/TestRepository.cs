@@ -7,10 +7,12 @@ namespace TeachersPet.Services
     public class TestRepository : ITestRepository
     {
         private readonly SiteContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public TestRepository(SiteContext context)
+        public TestRepository(SiteContext context, IUserRepository userRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         public async Task<bool> TestExists(string testName)
@@ -33,14 +35,23 @@ namespace TeachersPet.Services
             return await _context.Tests.Where(t => t.Id == id).Include(t => t.Questions).ThenInclude(q => q.Answers).FirstOrDefaultAsync();
         }
 
-        public async Task<Test[]> GetTests(User user)
+        public async Task<Test[]> GetTests(int userId)
         {
-            return await _context.Tests.ToArrayAsync();
+           return await _context.Users.Where(u => u.Id == userId).Include(u => u.Tests).ThenInclude(t => t.Questions).ThenInclude(q => q.Answers).SelectMany(u => u.Tests).ToArrayAsync();
         }
 
-        public async Task<Test> CreateTest(Test test)
+        public async Task<Test> CreateTest(Test test, int userId)
         {
-            await _context.Tests.AddAsync(test);
+            var user = await _userRepository.GetUser(userId);
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            if(user.Tests == null)
+            {
+                user.Tests = new List<Test>();
+            }   
+            user.Tests.Add(test);
             await _context.SaveChangesAsync();
             return test;
         }

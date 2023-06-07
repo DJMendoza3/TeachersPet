@@ -6,6 +6,7 @@ using TeachersPet.Models;
 using TeachersPet.Entities;
 using TeachersPet.Profiles;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace TeachersPet.Controllers
 {
@@ -16,22 +17,32 @@ namespace TeachersPet.Controllers
     {
         private readonly SiteContext _context;
         private readonly ITestRepository _testRepository;
+        private readonly IUserRepository _userRepository;
+
 
         private IMapper Mapper {
             get;
         }
 
-        public TestController(SiteContext context, ITestRepository testRepository, IMapper mapper)
+        public TestController(SiteContext context, ITestRepository testRepository, IMapper mapper, IUserRepository userRepository)
         {
             _context = context;
             _testRepository = testRepository;
             this.Mapper = mapper;
+            _userRepository = userRepository;
         }
 
         [HttpGet("mytests")]
         public async Task<ActionResult> GetTests()
         {
-            return Ok(Json("Test"));
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var tests = await _testRepository.GetTests(int.Parse(userId));
+            var testDtos = Mapper.Map<TestDto[]>(tests);
+            return Ok(Json(testDtos));
         }
 
         [HttpGet("test/{id}")]
@@ -55,8 +66,14 @@ namespace TeachersPet.Controllers
         [HttpPost("test")]
         public async Task<ActionResult> CreateTest(TestDto testDto)
         {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             var test = Mapper.Map<Test>(testDto);
-            await _testRepository.CreateTest(test);
+            await _testRepository.CreateTest(test, int.Parse(userId));
             return Ok(Json("Test added successfully"));
         }
     }

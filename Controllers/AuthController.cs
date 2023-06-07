@@ -10,6 +10,7 @@ using TeachersPet.Models;
 using TeachersPet.Services;
 using TeachersPet.Infrastructure;
 using BC = BCrypt.Net.BCrypt;
+using AutoMapper;
 
 namespace TeachersPet.Controllers;
 
@@ -24,13 +25,15 @@ public class AuthController : Controller
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
     private readonly JwtTokenCreator _jwtTokenCreator;
+    private readonly IMapper _mapper;
 
-    public AuthController(ILogger<AuthController> logger, SiteContext context, IUserRepository userRepository, IConfiguration configuration, JwtTokenCreator jwtTokenCreator)
+    public AuthController(ILogger<AuthController> logger, SiteContext context, IUserRepository userRepository, IConfiguration configuration, JwtTokenCreator jwtTokenCreator, IMapper mapper)
     {
         _logger = logger;
         _context = context;
         _userRepository = userRepository;
         _jwtTokenCreator = jwtTokenCreator;
+        _mapper = mapper;
         _configuration = configuration ?? 
                 throw new ArgumentNullException(nameof(configuration));
     }
@@ -71,15 +74,17 @@ public class AuthController : Controller
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register(User user)
+    public async Task<ActionResult> Register(RegisterDto userData)
     {
-        if (await _context.Users.AnyAsync(u => u.Name == user.Name))
+        if (await _context.Users.AnyAsync(u => u.Name == userData.Name))
         {
-            return BadRequest(Json("A user with name " + user.Name + " already exists"));
+            return BadRequest(Json("A user with name " + userData.Name + " already exists"));
         }
         try
         {
+            var user = _mapper.Map<User>(userData);
             user.Password = BC.HashPassword(user.Password);
+            user.Tests = new List<Test>();
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return Ok(Json("User created"));

@@ -8,8 +8,8 @@ namespace TeachersPet.Services
         Task<bool> TestExists(int id);
         Task<Test> GetTest(string testName);
         Task<Test> GetTest(int id);
-        Task<Test[]> GetTests(User user);
-        Task<Test> CreateTest(Test test);
+        Task<Test[]> GetTests(int userId);
+        Task<Test> CreateTest(Test test, int userId);
         Task<Test> UpdateTest(Test test);
         Task<Test> DeleteTest(Test test);
         Task<Test> DeleteTest(int id);

@@ -13,7 +13,7 @@ public class User
     public string Name { get; set; } = null!;
     [Required]
     public string UserName { get; set; } = null!;
-    [JsonIgnore]
+    [Required]
     public string Password { get; set; } = null!;
-    public ICollection<Test> Tests { get; set; } = new List<Test>();
+    public ICollection<Test> Tests { get; set; } = null!;
 }
