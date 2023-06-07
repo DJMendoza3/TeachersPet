@@ -8,6 +8,7 @@ using TeachersPet.Context;
 using TeachersPet.Entities;
 using TeachersPet.Models;
 using TeachersPet.Services;
+using TeachersPet.Infrastructure;
 using BC = BCrypt.Net.BCrypt;
 
 namespace TeachersPet.Controllers;
@@ -15,19 +16,21 @@ namespace TeachersPet.Controllers;
 [ApiController]
 [Route("api")]
 
-public class UserController : Controller
+public class AuthController : Controller
 {
 
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<AuthController> _logger;
     private readonly SiteContext _context;
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
+    private readonly JwtTokenCreator _jwtTokenCreator;
 
-    public UserController(ILogger<UserController> logger, SiteContext context, IUserRepository userRepository, IConfiguration configuration)
+    public AuthController(ILogger<AuthController> logger, SiteContext context, IUserRepository userRepository, IConfiguration configuration, JwtTokenCreator jwtTokenCreator)
     {
         _logger = logger;
         _context = context;
         _userRepository = userRepository;
+        _jwtTokenCreator = jwtTokenCreator;
         _configuration = configuration ?? 
                 throw new ArgumentNullException(nameof(configuration));
     }
@@ -47,30 +50,12 @@ public class UserController : Controller
             if (BC.Verify(credentials.Password, user.Password))
             {
                // Step 2: create a token
-            var securityKey = new SymmetricSecurityKey(
-                Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]));
-            var signingCredentials = new SigningCredentials(
-                securityKey, SecurityAlgorithms.HmacSha256);
-             
-            var claimsForToken = new List<Claim>();
-            claimsForToken.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-             
-            var jwtSecurityToken = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claimsForToken,
-                DateTime.UtcNow,
-                DateTime.UtcNow.AddHours(1),
-                signingCredentials);
-            var tokenToReturn = new JwtSecurityTokenHandler()
-               .WriteToken(jwtSecurityToken);
+            var token = _jwtTokenCreator.Generate(user.Name, user.Id);
 
-            //append token to response as http only cookie
-            Response.Cookies.Append("token", tokenToReturn, new CookieOptions
+            Response.Cookies.Append("TeachersPetCookie", token, new CookieOptions
             {
                 HttpOnly = true,
-                SameSite = SameSiteMode.Strict,
-                Secure = true
+                SameSite = SameSiteMode.Strict
             });
             return Ok(Json("Logged in"));
             }
