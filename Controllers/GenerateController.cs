@@ -7,6 +7,10 @@ using TeachersPet.Entities;
 using TeachersPet.Profiles;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace TeachersPet.Controllers
 {
@@ -16,12 +20,14 @@ namespace TeachersPet.Controllers
     public class GenerateController : Controller
     {
         private readonly SiteContext _context;
+
         private readonly ITestRepository _testRepository;
-     
+
         private readonly IUserRepository _userRepository;
         private readonly HttpClient _httpClient;
-    
-        private IMapper Mapper {
+
+        private IMapper Mapper
+        {
             get;
         }
 
@@ -34,8 +40,34 @@ namespace TeachersPet.Controllers
             _httpClient = httpClient;
         }
 
+        /*
+        Example request:
+        curl https://api.openai.com/v1/completions \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer $OPENAI_API_KEY" \
+        -d '{
+            "model = "text-davinci-003",
+            "prompt = "Say this is a test",
+            "max_tokens = 7,
+            "temperature = 0
+            }'
+
+        Accepted body parameters:
+        {
+            "model = "text-davinci-003",
+            "prompt = "Say this is a test",
+            "max_tokens = 7,
+            "temperature = 0,
+            "top_p = 1,
+            "n = 1,
+            "stream = false,
+            "logprobs = null,
+            "stop = "\n"
+        }
+        */
+
         [HttpPost("generate/test")]
-        public async Task<ActionResult> GenerateTest(GeneratorSettings settings) 
+        public async Task<ActionResult> GenerateTest(GeneratorSettings settings)
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
@@ -52,10 +84,26 @@ namespace TeachersPet.Controllers
             // {
             //     return BadRequest("Not enough credits");
             // }
-            HttpResponseMessage response = await _httpClient.GetAsync("https://baconipsum.com/api/?type=meat-and-filler");
-            var payload = await response.Content.ReadAsAsync<string[]>();
-            Console.WriteLine("Response: " + payload[0]);
-            return Ok(Json(payload));
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/completions");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "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");
+            var body = new
+            {
+                model = "text-davinci-003",
+                prompt = "This is a test",
+                temperature = 0.7f,
+                max_tokens = 50
+            };
+            var json = JsonSerializer.Serialize(body);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            request.Content = content;
+            //Marking error here
+            var response = await _httpClient.SendAsync(request);
+            var payload = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("Response: " + payload);
+            if(!response.IsSuccessStatusCode) {
+                return BadRequest(payload);
+            }
+            return Ok(payload);
 
 
         }
