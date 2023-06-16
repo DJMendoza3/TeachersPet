@@ -11,8 +11,8 @@ using TeachersPet.Context;
 namespace TeachersPet.Migrations
 {
     [DbContext(typeof(SiteContext))]
-    [Migration("20230607145159_valueNull")]
-    partial class valueNull
+    [Migration("20230616165319_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,37 +43,6 @@ namespace TeachersPet.Migrations
                     b.ToTable("Answer");
                 });
 
-            modelBuilder.Entity("TeachersPet.Entities.GeneratorSettings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NumberOfAnswers")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NumberOfQuestions")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PercentageOfDifficulty")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Topic")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GeneratorSettings");
-                });
-
             modelBuilder.Entity("TeachersPet.Entities.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -86,6 +55,9 @@ namespace TeachersPet.Migrations
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -100,11 +72,24 @@ namespace TeachersPet.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<float>("Difficulty")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("GradeLevel")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("TestName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Topic")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -124,6 +109,9 @@ namespace TeachersPet.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<float>("Credits")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -131,6 +119,9 @@ namespace TeachersPet.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Role_id")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
                         .IsRequired()

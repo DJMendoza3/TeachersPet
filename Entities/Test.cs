@@ -11,6 +11,15 @@ public class Test
     [Required]
     public string TestName { get; set; } = null!;
     [Required]
+    public int GradeLevel { get; set; } = 0;
+    [Required]
+    public int SubjectId { get; set; } = 0;
+    [Required]
+    public string Topic { get; set; } = null!;
+    [Required]
+    //validate this for 2 decimal places at some point
+    public float Difficulty { get; set; } = 0;
+    [Required]
     public string Text { get; set; } = null!;
     public ICollection<Question> Questions { get; set; } = null!;
 }
