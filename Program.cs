@@ -66,8 +66,8 @@ builder.Services.AddAuthentication(x =>
         x.Cookie.IsEssential = true;
     });
 
-//Add the authorization
-
+    //configure http client
+    builder.Services.AddHttpClient();
 
 //Add the jwt token creator
 builder.Services.AddSingleton(jwtSettings);

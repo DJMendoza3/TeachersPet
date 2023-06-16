@@ -8,9 +8,10 @@ namespace TeachersPet.Services
         Task<bool> UserOwnsTest(int userId, int testId);
         Task<User> GetUser(string username);
         Task<User> GetUser(int id);
-        Task<User> CreateUser(User user);
+        User CreateUser(User user);
         Task<User> UpdateUser(User user);
         Task<User> DeleteUser(User user);
         Task<User> DeleteUser(int id);
+        Task<int> AddCredits(int id, int credits);
     }
 }

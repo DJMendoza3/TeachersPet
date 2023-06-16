@@ -66,14 +66,13 @@ namespace TeachersPet.Services
             return (await _context.SaveChangesAsync() > 0);
         }
 
-        public async Task<User> CreateUser()
+        public async Task<int> AddCredits(int id, int credits)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            user.Credits += credits;
+            await _context.SaveChangesAsync();
+            return user.Id;
         }
 
-        Task<User> IUserRepository.CreateUser(User user)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

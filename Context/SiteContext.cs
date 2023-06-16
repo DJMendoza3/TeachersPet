@@ -12,6 +12,4 @@ public class SiteContext: DbContext
     public DbSet<User> Users { get; set; } = null!;
 
     public DbSet<Test> Tests { get; set; } = null!;
-
-    public DbSet<GeneratorSettings> GeneratorSettings { get; set; } = null!;
 }
