@@ -113,7 +113,7 @@ namespace TeachersPet.Controllers
             int pTo = payload.LastIndexOf("\"index\": ");
             payload = payload.Substring(pFrom, pTo - pFrom);
             //cant index when result is 1 long string
-            var test = GeneratorSettings.ParseResponse(payload);
+            var test = GeneratorSettings.ParseResponse(payload, name, testDescription);
             return Ok(test);
 
 

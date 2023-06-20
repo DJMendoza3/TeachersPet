@@ -23,9 +23,9 @@ namespace TeachersPet.Models
             return baseCredits + questionModifier + answerModifier;
         }
         
-        public static TestDto ParseResponse(string response) 
+        public static TestDto ParseResponse(string response, string name, string testDescription) 
         {
-            TestDto test = new TestDto() { Questions = new List<QuestionDto>()};
+            TestDto test = new TestDto() { testName = name, Text = testDescription, Questions = new List<QuestionDto>()};
             string formattedResponse = response.Trim('"');
             List<string> splitLines = formattedResponse.Split(@"\n").ToList();
             int count = 3;
