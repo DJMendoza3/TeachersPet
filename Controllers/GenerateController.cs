@@ -69,6 +69,11 @@ namespace TeachersPet.Controllers
         [HttpPost("generate/test")]
         public async Task<ActionResult> GenerateTest(GeneratorSettings settings)
         {
+            //store test data that wont be sent to the api but will be stored in the db
+            string name = settings.TestName;
+            string testDescription = settings.TestDescription;
+            string testGroup = settings.TestGroup;
+
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
             {
@@ -84,14 +89,15 @@ namespace TeachersPet.Controllers
             // {
             //     return BadRequest("Not enough credits");
             // }
+            string formattedPrompt = $"Return a generated test created to these specifications: {{Subject = {settings.Subject}, Topic = {settings.Topic}, Grade Level = {settings.Grade}, Difficulty = {settings.Difficulty}/10, Number of questions = {settings.NumberOfQuestions}, Number of answers per question = {settings.NumberOfAnswers}}} The test should return an expanded version of this format: {{Question: This is a sample question \n Answers:{{sample answer1, sample answer2}} \n Correct Answer: sample answer1}}";
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/completions");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "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");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "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");
             var body = new
             {
                 model = "text-davinci-003",
-                prompt = "This is a test",
-                temperature = 0.7f,
-                max_tokens = 50
+                prompt = formattedPrompt,
+                temperature = 0.2f,
+                max_tokens = 500
             };
             var json = JsonSerializer.Serialize(body);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -99,11 +105,16 @@ namespace TeachersPet.Controllers
             //Marking error here
             var response = await _httpClient.SendAsync(request);
             var payload = await response.Content.ReadAsStringAsync();
-            Console.WriteLine("Response: " + payload);
             if(!response.IsSuccessStatusCode) {
                 return BadRequest(payload);
             }
-            return Ok(payload);
+
+            int pFrom = payload.IndexOf("\"text\": ") + "\"text\": ".Length;
+            int pTo = payload.LastIndexOf("\"index\": ");
+            payload = payload.Substring(pFrom, pTo - pFrom);
+            //cant index when result is 1 long string
+            var test = GeneratorSettings.ParseResponse(payload);
+            return Ok(test);
 
 
         }
