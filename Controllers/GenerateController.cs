@@ -5,6 +5,7 @@ using TeachersPet.Services;
 using TeachersPet.Models;
 using TeachersPet.Entities;
 using TeachersPet.Profiles;
+using TeachersPet.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Net.Http.Headers;
@@ -106,14 +107,27 @@ namespace TeachersPet.Controllers
             var response = await _httpClient.SendAsync(request);
             var payload = await response.Content.ReadAsStringAsync();
             if(!response.IsSuccessStatusCode) {
-                return BadRequest(payload);
+                return BadRequest("An error occured while generating the test. Credits were not deducted. Please try again.");
             }
 
             int pFrom = payload.IndexOf("\"text\": ") + "\"text\": ".Length;
             int pTo = payload.LastIndexOf("\"index\": ");
             payload = payload.Substring(pFrom, pTo - pFrom);
             //cant index when result is 1 long string
-            var test = GeneratorSettings.ParseResponse(payload, name, testDescription);
+            TestDto test = null!;
+            try {
+                test = GeneratorSettings.ParseResponse(payload, name, testDescription);
+            } 
+            catch(Exception e) {
+                throw new OpenAIParseException("Failed to parse response", e);
+            }
+
+            if(test == null) {
+                return BadRequest("Failed to parse response. Credits were not deducted. Please try again.");
+            }
+            Test dbtest = Mapper.Map<Test>(test);
+            // await _testRepository.CreateTest(dbtest, user.Id);
+
             return Ok(test);
 
 
