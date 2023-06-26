@@ -7,12 +7,13 @@ namespace TeachersPet.Services
     public class TestRepository : ITestRepository
     {
         private readonly SiteContext _context;
-        private readonly IUserRepository _userRepository;
+        private readonly ITeacherRepository _teacherRepository;
 
-        public TestRepository(SiteContext context, IUserRepository userRepository)
+        public TestRepository(SiteContext context, ITeacherRepository teacherRepository)
+        
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _teacherRepository = teacherRepository ?? throw new ArgumentNullException(nameof(teacherRepository));
         }
 
         public async Task<bool> TestExists(string testName)
@@ -41,12 +42,12 @@ namespace TeachersPet.Services
 
         public async Task<Test[]> GetTests(int userId)
         {
-            return await _context.Users.Where(u => u.Id == userId).Include(u => u.Tests).ThenInclude(t => t.Questions).ThenInclude(q => q.Answers).SelectMany(u => u.Tests).ToArrayAsync();
+            return await _context.Teachers.Where(u => u.Id == userId).Include(u => u.Tests).ThenInclude(t => t.Questions).ThenInclude(q => q.Answers).SelectMany(u => u.Tests).ToArrayAsync();
         }
 
         public async Task<Test> CreateTest(Test test, int userId)
         {
-            var user = await _userRepository.GetUser(userId);
+            var user = await _teacherRepository.GetTeacher(userId);
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
@@ -70,7 +71,7 @@ namespace TeachersPet.Services
 
         public async Task<bool> DeleteTest(Test test, int userId)
         {
-            var user = await _userRepository.GetUser(userId);
+            var user = await _teacherRepository.GetTeacher(userId);
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
@@ -91,7 +92,7 @@ namespace TeachersPet.Services
 
         public async Task<bool> DeleteTest(int id, int userId)
         {
-            var user = await _userRepository.GetUser(userId);
+            var user = await _teacherRepository.GetTeacher(userId);
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));

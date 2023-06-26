@@ -24,7 +24,7 @@ namespace TeachersPet.Controllers
 
         private readonly ITestRepository _testRepository;
 
-        private readonly IUserRepository _userRepository;
+        private readonly ITeacherRepository _teacherRepository;
         private readonly HttpClient _httpClient;
 
         private IMapper Mapper
@@ -32,12 +32,12 @@ namespace TeachersPet.Controllers
             get;
         }
 
-        public GenerateController(SiteContext context, ITestRepository testRepository, IMapper mapper, IUserRepository userRepository, HttpClient httpClient)
+        public GenerateController(SiteContext context, ITestRepository testRepository, IMapper mapper, ITeacherRepository teacherRepository, HttpClient httpClient)
         {
             _context = context;
             _testRepository = testRepository;
             this.Mapper = mapper;
-            _userRepository = userRepository;
+            _teacherRepository = teacherRepository;
             _httpClient = httpClient;
         }
 
@@ -75,18 +75,18 @@ namespace TeachersPet.Controllers
             string testDescription = settings.TestDescription;
             string testGroup = settings.TestGroup;
 
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
+            string teacherId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (teacherId == null)
             {
                 return Unauthorized();
             }
-            var user = await _userRepository.GetUser(int.Parse(userId));
-            if (user == null)
+            var teacher = await _teacherRepository.GetTeacher(int.Parse(teacherId));
+            if (teacher == null)
             {
                 return Unauthorized();
             }
             var generationCredits = settings.CalculateCredits();
-            // if (user.Credits < generationCredits)
+            // if (teacher.Credits < generationCredits)
             // {
             //     return BadRequest("Not enough credits");
             // }
@@ -126,7 +126,7 @@ namespace TeachersPet.Controllers
                 return BadRequest("Failed to parse response. Credits were not deducted. Please try again.");
             }
             Test dbtest = Mapper.Map<Test>(test);
-            // await _testRepository.CreateTest(dbtest, user.Id);
+            // await _testRepository.CreateTest(dbtest, teacher.Id);
 
             return Ok(test);
 

@@ -17,17 +17,17 @@ namespace TeachersPet.Controllers
     {
         private readonly SiteContext _context;
         private readonly ITestRepository _testRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly ITeacherRepository _teacherRepository;
         private IMapper Mapper {
             get;
         }
 
-        public PurchaseController(SiteContext context, ITestRepository testRepository, IMapper mapper, IUserRepository userRepository)
+        public PurchaseController(SiteContext context, ITestRepository testRepository, IMapper mapper, ITeacherRepository teacherRepository)
         {
             _context = context;
             _testRepository = testRepository;
             this.Mapper = mapper;
-            _userRepository = userRepository;
+            _teacherRepository = teacherRepository;
         }
 
         [HttpPost("purchase/credits")]
@@ -35,13 +35,13 @@ namespace TeachersPet.Controllers
         public async Task<ActionResult> PurchaseCredits(int credits = 0) 
         {
             //this will be where stripe is called
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
+            string teacherId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (teacherId == null)
             {
                 return Unauthorized();
             }
-            var user = await _userRepository.GetUser(int.Parse(userId));
-            if (user == null)
+            var teacher = await _teacherRepository.GetTeacher(int.Parse(teacherId));
+            if (teacher == null)
             {
                 return Unauthorized();
             }
@@ -49,12 +49,12 @@ namespace TeachersPet.Controllers
             {
                 return BadRequest();
             }
-            user.Credits += credits;
-            await _userRepository.AddCredits(user.Id, credits);
+            teacher.Credits += credits;
+            await _teacherRepository.AddCredits(teacher.Id, credits);
             return Ok(Json("Credits purchased"));
         }
 
-        //route for updating user role with payment
+        //route for updating teacher role with payment
         [HttpPost("purchase/plan")]
         public async Task<ActionResult> PurchasePlan(int planId = 0) 
         {

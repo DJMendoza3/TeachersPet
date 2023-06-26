@@ -15,4 +15,7 @@ public class School
     public string Email { get; set; } = null!;
     public string Website { get; set; } = null!;
     public string Logo { get; set; } = null!;
+    public ICollection<Student> Students { get; set; } = null!;
+    public ICollection<Teacher> Teachers { get; set; } = null!;
+    public ICollection<Faculty> Faculty { get; set; } = null!;
 }

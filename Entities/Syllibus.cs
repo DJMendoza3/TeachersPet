@@ -10,5 +10,4 @@ public class Syllabus
     public string Description { get; set; } = null!;
     public string schema { get; set; } = null!;
     public string prompt { get; set; } = null!;
-    public ICollection<Lesson> Lessons { get; set; } = null!;
 }

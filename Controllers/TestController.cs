@@ -17,14 +17,14 @@ namespace TeachersPet.Controllers
     {
         private readonly SiteContext _context;
         private readonly ITestRepository _testRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly ITeacherRepository _userRepository;
 
 
         private IMapper Mapper {
             get;
         }
 
-        public TestController(SiteContext context, ITestRepository testRepository, IMapper mapper, IUserRepository userRepository)
+        public TestController(SiteContext context, ITestRepository testRepository, IMapper mapper, ITeacherRepository userRepository)
         {
             _context = context;
             _testRepository = testRepository;
@@ -89,11 +89,11 @@ namespace TeachersPet.Controllers
             {
                 return NotFound();
             }
-            if (!await _userRepository.UserExists(userId))
+            if (!await _userRepository.TeacherExists(userId))
             {
                 return Unauthorized();
             }
-            if (!await _userRepository.UserOwnsTest(int.Parse(userId), testDto.Id))
+            if (!await _userRepository.TeacherOwnsTest(int.Parse(userId), testDto.Id))
             {
                 return Unauthorized();
             }

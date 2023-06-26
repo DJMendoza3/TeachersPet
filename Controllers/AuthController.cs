@@ -22,12 +22,12 @@ public class AuthController : Controller
 
     private readonly ILogger<AuthController> _logger;
     private readonly SiteContext _context;
-    private readonly IUserRepository _userRepository;
+    private readonly ITeacherRepository _userRepository;
     private readonly IConfiguration _configuration;
     private readonly JwtTokenCreator _jwtTokenCreator;
     private readonly IMapper _mapper;
 
-    public AuthController(ILogger<AuthController> logger, SiteContext context, IUserRepository userRepository, IConfiguration configuration, JwtTokenCreator jwtTokenCreator, IMapper mapper)
+    public AuthController(ILogger<AuthController> logger, SiteContext context, ITeacherRepository userRepository, IConfiguration configuration, JwtTokenCreator jwtTokenCreator, IMapper mapper)
     {
         _logger = logger;
         _context = context;
@@ -41,12 +41,12 @@ public class AuthController : Controller
     [HttpPost("login")]
     public async Task<ActionResult<string>> Login(CredentialsDto credentials)
     {
-        if(!await _userRepository.UserExists(credentials.Username))
+        if(!await _userRepository.TeacherExists(credentials.Username))
         {
-            return BadRequest(Json("User does not exist"));
+            return BadRequest(Json("Teacher does not exist"));
         }
 
-        var user = await _userRepository.GetUser(credentials.Username);
+        var user = await _userRepository.GetTeacher(credentials.Username);
         
         try
         {
@@ -76,18 +76,18 @@ public class AuthController : Controller
     [HttpPost("register")]
     public async Task<ActionResult> Register(RegisterDto userData)
     {
-        if (await _context.Users.AnyAsync(u => u.Name == userData.Name))
+        if (await _context.Teachers.AnyAsync(u => u.Name == userData.Name))
         {
             return BadRequest(Json("A user with name " + userData.Name + " already exists"));
         }
         try
         {
-            var user = _mapper.Map<User>(userData);
+            var user = _mapper.Map<Teacher>(userData);
             user.Password = BC.HashPassword(user.Password);
             user.Tests = new List<Test>();
-            _context.Users.Add(user);
+            _context.Teachers.Add(user);
             await _context.SaveChangesAsync();
-            return Ok(Json("User created"));
+            return Ok(Json("Teacher created"));
         }
         catch
         {
@@ -99,12 +99,12 @@ public class AuthController : Controller
     
     public JsonResult Refresh()
     {
-        return Json(new User { Name = "John Doe" });
+        return Json(new Teacher { Name = "John Doe" });
     }
     [HttpGet("logout")]
     public JsonResult Logout()
     {
-        return Json(new User { Name = "John Doe" });
+        return Json(new Teacher { Name = "John Doe" });
     }
 
 }
