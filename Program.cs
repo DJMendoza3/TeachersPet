@@ -74,8 +74,10 @@ builder.Services.AddSingleton(jwtSettings);
 builder.Services.AddTransient<JwtTokenCreator>();
 
 //Add the user repository
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
 builder.Services.AddTransient<ITestRepository, TestRepository>();
+
 //register the sqlite database
 builder.Services.AddDbContext<SiteContext>(options => options.UseSqlite("Data Source=users.db"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

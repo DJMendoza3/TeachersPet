@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeachersPet.Entities;
 
-public class Faculty
+public class Faculty: User
 {
  public int Id { get; set; }   
 }
