@@ -10,13 +10,15 @@ public abstract class User
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     [Required]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
     [Required]
-    public string UserName { get; set; } = null!;
+    public string UserName { get; set; }
     [Required]
-    public string Password { get; set; } = null!;
+    public string Password { get; set; }
     [Required]
-    public string Email { get; set; } = null!;
-    public School School { get; set; } = null!;
+    public string Email { get; set; }
+    [Required]
+    public Role UserRole { get; set; }
+    public School School { get; set; }
 
 }

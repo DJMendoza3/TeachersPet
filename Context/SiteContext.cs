@@ -8,9 +8,7 @@ public class SiteContext: DbContext
     public SiteContext(DbContextOptions<SiteContext> options) : base(options)
     {
     }
-    public DbSet<Teacher> Teachers { get; set; } = null!;
-    public DbSet<Student> Students { get; set; } = null!;
-    public DbSet<Faculty> Faculty { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
     public DbSet<School> Schools { get; set; } = null!;
     public DbSet<Test> Tests { get; set; } = null!;
     public DbSet<Lesson> Lessons { get; set; } = null!;

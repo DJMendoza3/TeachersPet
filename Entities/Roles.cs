@@ -3,11 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeachersPet.Entities;
 
-public class Role
+public enum Role
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-    [Required]
-    public string Name { get; set; } = null!;
+    Student,
+    Teacher,
+    Faculty
 }

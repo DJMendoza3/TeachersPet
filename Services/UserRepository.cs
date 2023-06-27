@@ -14,62 +14,62 @@ namespace TeachersPet.Services
             _teacherRepository = teacherRepository ?? throw new ArgumentNullException(nameof(teacherRepository));
         }
 
-        public async Task<bool> UserExists(string name, UserTypes userType)
+        public async Task<bool> UserExists(string name, Role role)
         {
-            switch (userType)
+            switch (role)
             {
-                case UserTypes.Teacher:
+                case Role.Teacher:
                     return await _context.Teachers.AnyAsync(t => t.Name == name);
-                case UserTypes.Student:
+                case Role.Student:
                     return await _context.Students.AnyAsync(s => s.Name == name);
-                case UserTypes.Faculty:
+                case Role.Faculty:
                     return await _context.Faculty.AnyAsync(f => f.Name == name);
                 default:
                     return false;
             }
         }
 
-        public async Task<User> GetUser(string name, UserTypes userType)
+        public async Task<User> GetUser(string name, Role role)
         {
-            switch (userType)
+            switch (role)
             {
-                case UserTypes.Teacher:
+                case Role.Teacher:
                     return await _context.Teachers.Where(t => t.Name == name).FirstOrDefaultAsync();
-                case UserTypes.Student:
+                case Role.Student:
                     return await _context.Students.Where(s => s.Name == name).FirstOrDefaultAsync();
-                case UserTypes.Faculty:
+                case Role.Faculty:
                     return await _context.Faculty.Where(f => f.Name == name).FirstOrDefaultAsync();
                 default:
                     return null!;
             }
         }
 
-        public async Task<User> GetUser(int id, UserTypes userType)
+        public async Task<User> GetUser(int id, Role role)
         {
-            switch (userType)
+            switch (role)
             {
-                case UserTypes.Teacher:
+                case Role.Teacher:
                     return await _context.Teachers.Where(t => t.Id == id).FirstOrDefaultAsync();
-                case UserTypes.Student:
+                case Role.Student:
                     return await _context.Students.Where(s => s.Id == id).FirstOrDefaultAsync();
-                case UserTypes.Faculty:
+                case Role.Faculty:
                     return await _context.Faculty.Where(f => f.Id == id).FirstOrDefaultAsync();
                 default:
                     return null!;
             }
         }
 
-        public async Task<User> CreateUser(User user, UserTypes userType)
+        public async Task<User> CreateUser(User user, Role role)
         {
-            switch (userType)
+            switch (role)
             {
-                case UserTypes.Teacher:
+                case Role.Teacher:
                     _context.Teachers.Add((Teacher)user);
                     break;
-                case UserTypes.Student:
+                case Role.Student:
                     _context.Students.Add((Student)user);
                     break;
-                case UserTypes.Faculty:
+                case Role.Faculty:
                     _context.Faculty.Add((Faculty)user);
                     break;
                 default:

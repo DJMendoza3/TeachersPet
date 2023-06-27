@@ -111,7 +111,26 @@ namespace TeachersPet.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SchoolId")
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserRole")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -348,11 +367,14 @@ namespace TeachersPet.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserRole")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Student");
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Syllabus", b =>
@@ -413,15 +435,15 @@ namespace TeachersPet.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Role_id")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("SchoolId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -548,9 +570,13 @@ namespace TeachersPet.Migrations
 
             modelBuilder.Entity("TeachersPet.Entities.Faculty", b =>
                 {
-                    b.HasOne("TeachersPet.Entities.School", null)
+                    b.HasOne("TeachersPet.Entities.School", "School")
                         .WithMany("Faculty")
-                        .HasForeignKey("SchoolId");
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Grade", b =>
