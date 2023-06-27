@@ -74,8 +74,8 @@ builder.Services.AddSingleton(jwtSettings);
 builder.Services.AddTransient<JwtTokenCreator>();
 
 //Add the user repository
+builder.Services.AddTransient<IAuthRepository, AuthRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
 builder.Services.AddTransient<ITestRepository, TestRepository>();
 
 //register the sqlite database

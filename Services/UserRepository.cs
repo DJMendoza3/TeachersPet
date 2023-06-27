@@ -1,82 +1,77 @@
-using Microsoft.EntityFrameworkCore;
-using TeachersPet.Entities;
 using TeachersPet.Context;
+using TeachersPet.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace TeachersPet.Services
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository 
     {
         private readonly SiteContext _context;
-        private readonly ITeacherRepository _teacherRepository;
-        public UserRepository(SiteContext context, ITeacherRepository teacherRepository)
+
+        public UserRepository(SiteContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _teacherRepository = teacherRepository ?? throw new ArgumentNullException(nameof(teacherRepository));
         }
 
-        public async Task<bool> UserExists(string name, Role role)
+        public async Task<bool> UserExists(string username)
         {
-            switch (role)
-            {
-                case Role.Teacher:
-                    return await _context.Teachers.AnyAsync(t => t.Name == name);
-                case Role.Student:
-                    return await _context.Students.AnyAsync(s => s.Name == name);
-                case Role.Faculty:
-                    return await _context.Faculty.AnyAsync(f => f.Name == name);
-                default:
-                    return false;
-            }
+            return await _context.Users.AnyAsync(u => u.Name == username);
+        }
+        public async Task<bool> UserOwnsTest(int userId, int testId)
+        {
+            return await _context.Users.Where(u => u.Id == userId).Include(u => u.Tests).SelectMany(u => u.Tests).AnyAsync(t => t.Id == testId);
         }
 
-        public async Task<User> GetUser(string name, Role role)
+        public async Task<User> GetUser(string username)
         {
-            switch (role)
-            {
-                case Role.Teacher:
-                    return await _context.Teachers.Where(t => t.Name == name).FirstOrDefaultAsync();
-                case Role.Student:
-                    return await _context.Students.Where(s => s.Name == name).FirstOrDefaultAsync();
-                case Role.Faculty:
-                    return await _context.Faculty.Where(f => f.Name == name).FirstOrDefaultAsync();
-                default:
-                    return null!;
-            }
+            return await _context.Users.FirstOrDefaultAsync(u => u.Name == username);
         }
 
-        public async Task<User> GetUser(int id, Role role)
+        public async Task<User> GetUser(int id)
         {
-            switch (role)
-            {
-                case Role.Teacher:
-                    return await _context.Teachers.Where(t => t.Id == id).FirstOrDefaultAsync();
-                case Role.Student:
-                    return await _context.Students.Where(s => s.Id == id).FirstOrDefaultAsync();
-                case Role.Faculty:
-                    return await _context.Faculty.Where(f => f.Id == id).FirstOrDefaultAsync();
-                default:
-                    return null!;
-            }
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> CreateUser(User user, Role role)
+        public User CreateUser(User user)
         {
-            switch (role)
-            {
-                case Role.Teacher:
-                    _context.Teachers.Add((Teacher)user);
-                    break;
-                case Role.Student:
-                    _context.Students.Add((Student)user);
-                    break;
-                case Role.Faculty:
-                    _context.Faculty.Add((Faculty)user);
-                    break;
-                default:
-                    return null!;
-            }
+            _context.Users.AddAsync(user);
+            _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<User> UpdateUser(User user)
+        {
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
             return user;
+        }
+
+        public async Task<User> DeleteUser(User user)
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<User> DeleteUser(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _context.SaveChangesAsync() > 0);
+        }
+
+        public async Task<int> AddCredits(int id, int credits)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            user.Credits += credits;
+            await _context.SaveChangesAsync();
+            return user.Id;
         }
 
     }

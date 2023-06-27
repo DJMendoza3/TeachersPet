@@ -7,13 +7,13 @@ namespace TeachersPet.Services
     public class TestRepository : ITestRepository
     {
         private readonly SiteContext _context;
-        private readonly ITeacherRepository _teacherRepository;
+        private readonly IUserRepository _userRepository;
 
-        public TestRepository(SiteContext context, ITeacherRepository teacherRepository)
+        public TestRepository(SiteContext context, IUserRepository userRepository)
         
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _teacherRepository = teacherRepository ?? throw new ArgumentNullException(nameof(teacherRepository));
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         public async Task<bool> TestExists(string testName)
@@ -40,26 +40,26 @@ namespace TeachersPet.Services
             return await _context.Tests.Where(t => t.Id == id).Include(t => t.Questions).ThenInclude(q => q.Answers).FirstOrDefaultAsync();
         }
 
-        public async Task<Test[]> GetTests(int userId)
-        {
-            return await _context.Teachers.Where(u => u.Id == userId).Include(u => u.Tests).ThenInclude(t => t.Questions).ThenInclude(q => q.Answers).SelectMany(u => u.Tests).ToArrayAsync();
-        }
+        // public async Task<Test[]> GetTests(int userId)
+        // {
+        //     return await _context.Users.Where(u => u.Id == userId).Include(u => u.Tests).ThenInclude(t => t.Questions).ThenInclude(q => q.Answers).SelectMany(u => u.Tests).ToArrayAsync();
+        // }
 
-        public async Task<Test> CreateTest(Test test, int userId)
-        {
-            var user = await _teacherRepository.GetTeacher(userId);
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            if (user.Tests == null)
-            {
-                user.Tests = new List<Test>();
-            }
-            user.Tests.Add(test);
-            await _context.SaveChangesAsync();
-            return test;
-        }
+        // public async Task<Test> CreateTest(Test test, int userId)
+        // {
+        //     var user = await _userRepository.GetTeacher(userId);
+        //     if (user == null)
+        //     {
+        //         throw new ArgumentNullException(nameof(user));
+        //     }
+        //     if (user.Tests == null)
+        //     {
+        //         user.Tests = new List<Test>();
+        //     }
+        //     user.Tests.Add(test);
+        //     await _context.SaveChangesAsync();
+        //     return test;
+        // }
 
         public async Task<bool> UpdateTest(Test test)
         {
@@ -69,49 +69,49 @@ namespace TeachersPet.Services
             return true;
         }
 
-        public async Task<bool> DeleteTest(Test test, int userId)
-        {
-            var user = await _teacherRepository.GetTeacher(userId);
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            if (test == null)
-            {
-                throw new ArgumentNullException(nameof(test));
-            }
-            //if the test is not in the user's list of tests, throw an exception
-            if (!user.Tests.Contains(test))
-            {
-                throw new ArgumentException("Test does not belong to user");
-            }
-            _context.Tests.Remove(test);
-            await _context.SaveChangesAsync();
-            return true;
-        }
+        // public async Task<bool> DeleteTest(Test test, int userId)
+        // {
+        //     var user = await _userRepository.GetTeacher(userId);
+        //     if (user == null)
+        //     {
+        //         throw new ArgumentNullException(nameof(user));
+        //     }
+        //     if (test == null)
+        //     {
+        //         throw new ArgumentNullException(nameof(test));
+        //     }
+        //     //if the test is not in the user's list of tests, throw an exception
+        //     if (!user.Tests.Contains(test))
+        //     {
+        //         throw new ArgumentException("Test does not belong to user");
+        //     }
+        //     _context.Tests.Remove(test);
+        //     await _context.SaveChangesAsync();
+        //     return true;
+        // }
 
-        public async Task<bool> DeleteTest(int id, int userId)
-        {
-            var user = await _teacherRepository.GetTeacher(userId);
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            var test = await _context.Tests.FirstOrDefaultAsync(t => t.Id == id);
-            if (test == null)
-            {
-                throw new ArgumentNullException(nameof(test));
-            }
-            //if the test is not in the user's list of tests, throw an exception
-            if (!user.Tests.Contains(test))
-            {
-                throw new ArgumentException("Test does not belong to user");
-            }
-            _context.Tests.Remove(test);
-            await _context.SaveChangesAsync();
+        // public async Task<bool> DeleteTest(int id, int userId)
+        // {
+        //     var user = await _userRepository.GetTeacher(userId);
+        //     if (user == null)
+        //     {
+        //         throw new ArgumentNullException(nameof(user));
+        //     }
+        //     var test = await _context.Tests.FirstOrDefaultAsync(t => t.Id == id);
+        //     if (test == null)
+        //     {
+        //         throw new ArgumentNullException(nameof(test));
+        //     }
+        //     //if the test is not in the user's list of tests, throw an exception
+        //     if (!user.Tests.Contains(test))
+        //     {
+        //         throw new ArgumentException("Test does not belong to user");
+        //     }
+        //     _context.Tests.Remove(test);
+        //     await _context.SaveChangesAsync();
 
-            return true;
-        }
+        //     return true;
+        // }
 
         public async Task<bool> SaveChangesAsync()
         {

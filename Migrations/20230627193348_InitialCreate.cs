@@ -33,7 +33,7 @@ namespace TeachersPet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Faculty",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -42,88 +42,19 @@ namespace TeachersPet.Migrations
                     UserName = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Credits = table.Column<double>(type: "REAL", nullable: false),
                     UserRole = table.Column<int>(type: "INTEGER", nullable: false),
                     SchoolId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faculty", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Faculty_Schools_SchoolId",
+                        name: "FK_Users_Schools_SchoolId",
                         column: x => x.SchoolId,
                         principalTable: "Schools",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserRole = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    UserName = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    SchoolId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_Schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalTable: "Schools",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teachers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Credits = table.Column<float>(type: "REAL", nullable: false),
-                    UserRole = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    UserName = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    SchoolId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teachers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Teachers_Schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalTable: "Schools",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Note",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    prompt = table.Column<string>(type: "TEXT", nullable: false),
-                    content = table.Column<string>(type: "TEXT", nullable: false),
-                    StudentId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Note", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Note_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -134,21 +65,15 @@ namespace TeachersPet.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    StudentId = table.Column<int>(type: "INTEGER", nullable: true),
-                    TeacherId = table.Column<int>(type: "INTEGER", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Courses_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
+                        name: "FK_Courses_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -164,8 +89,7 @@ namespace TeachersPet.Migrations
                     Subject = table.Column<string>(type: "TEXT", nullable: false),
                     Topic = table.Column<string>(type: "TEXT", nullable: false),
                     schema = table.Column<string>(type: "TEXT", nullable: false),
-                    CourseId = table.Column<int>(type: "INTEGER", nullable: true),
-                    TeacherId = table.Column<int>(type: "INTEGER", nullable: true)
+                    CourseId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -174,11 +98,6 @@ namespace TeachersPet.Migrations
                         name: "FK_Lessons_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Lessons_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
                         principalColumn: "Id");
                 });
 
@@ -192,8 +111,7 @@ namespace TeachersPet.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     schema = table.Column<string>(type: "TEXT", nullable: false),
                     prompt = table.Column<string>(type: "TEXT", nullable: false),
-                    CourseId = table.Column<int>(type: "INTEGER", nullable: true),
-                    TeacherId = table.Column<int>(type: "INTEGER", nullable: true)
+                    CourseId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -202,11 +120,6 @@ namespace TeachersPet.Migrations
                         name: "FK_Syllabus_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Syllabus_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
                         principalColumn: "Id");
                 });
 
@@ -223,7 +136,7 @@ namespace TeachersPet.Migrations
                     Difficulty = table.Column<float>(type: "REAL", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: false),
                     CourseId = table.Column<int>(type: "INTEGER", nullable: true),
-                    TeacherId = table.Column<int>(type: "INTEGER", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -234,9 +147,9 @@ namespace TeachersPet.Migrations
                         principalTable: "Courses",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Tests_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
+                        name: "FK_Tests_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -272,8 +185,7 @@ namespace TeachersPet.Migrations
                     TestId = table.Column<int>(type: "INTEGER", nullable: false),
                     CourseId = table.Column<int>(type: "INTEGER", nullable: false),
                     Start = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    TimeLimit = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    StudentId = table.Column<int>(type: "INTEGER", nullable: true)
+                    TimeLimit = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -285,39 +197,7 @@ namespace TeachersPet.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActiveExams_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_ActiveExams_Tests_TestId",
-                        column: x => x.TestId,
-                        principalTable: "Tests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Grade",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Value = table.Column<int>(type: "INTEGER", nullable: false),
-                    Comment = table.Column<string>(type: "TEXT", nullable: false),
-                    TestId = table.Column<int>(type: "INTEGER", nullable: false),
-                    StudentId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Grade", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Grade_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Grade_Tests_TestId",
                         column: x => x.TestId,
                         principalTable: "Tests",
                         principalColumn: "Id",
@@ -342,40 +222,6 @@ namespace TeachersPet.Migrations
                         column: x => x.TestId,
                         principalTable: "Tests",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TestResult",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    TestId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CourseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Result = table.Column<float>(type: "REAL", nullable: false),
-                    StudentId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TestResult", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TestResult_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TestResult_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TestResult_Tests_TestId",
-                        column: x => x.TestId,
-                        principalTable: "Tests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -404,11 +250,6 @@ namespace TeachersPet.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActiveExams_StudentId",
-                table: "ActiveExams",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ActiveExams_TestId",
                 table: "ActiveExams",
                 column: "TestId");
@@ -419,29 +260,9 @@ namespace TeachersPet.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_StudentId",
+                name: "IX_Courses_UserId",
                 table: "Courses",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Courses_TeacherId",
-                table: "Courses",
-                column: "TeacherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Faculty_SchoolId",
-                table: "Faculty",
-                column: "SchoolId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Grade_StudentId",
-                table: "Grade",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Grade_TestId",
-                table: "Grade",
-                column: "TestId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Image_LessonId",
@@ -454,24 +275,9 @@ namespace TeachersPet.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lessons_TeacherId",
-                table: "Lessons",
-                column: "TeacherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Note_StudentId",
-                table: "Note",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Question_TestId",
                 table: "Question",
                 column: "TestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_SchoolId",
-                table: "Students",
-                column: "SchoolId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Syllabus_CourseId",
@@ -479,39 +285,19 @@ namespace TeachersPet.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Syllabus_TeacherId",
-                table: "Syllabus",
-                column: "TeacherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Teachers_SchoolId",
-                table: "Teachers",
-                column: "SchoolId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TestResult_CourseId",
-                table: "TestResult",
-                column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TestResult_StudentId",
-                table: "TestResult",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TestResult_TestId",
-                table: "TestResult",
-                column: "TestId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Tests_CourseId",
                 table: "Tests",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tests_TeacherId",
+                name: "IX_Tests_UserId",
                 table: "Tests",
-                column: "TeacherId");
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_SchoolId",
+                table: "Users",
+                column: "SchoolId");
         }
 
         /// <inheritdoc />
@@ -524,22 +310,10 @@ namespace TeachersPet.Migrations
                 name: "Answers");
 
             migrationBuilder.DropTable(
-                name: "Faculty");
-
-            migrationBuilder.DropTable(
-                name: "Grade");
-
-            migrationBuilder.DropTable(
                 name: "Image");
 
             migrationBuilder.DropTable(
-                name: "Note");
-
-            migrationBuilder.DropTable(
                 name: "Syllabus");
-
-            migrationBuilder.DropTable(
-                name: "TestResult");
 
             migrationBuilder.DropTable(
                 name: "Question");
@@ -554,10 +328,7 @@ namespace TeachersPet.Migrations
                 name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Students");
-
-            migrationBuilder.DropTable(
-                name: "Teachers");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Schools");

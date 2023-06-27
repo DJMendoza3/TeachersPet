@@ -4,9 +4,14 @@ namespace TeachersPet.Services
 {
     public interface IUserRepository
     {
-        Task<bool> UserExists(string name, Role role);
-        Task<User> GetUser(string name, Role role);
-        Task<User> GetUser(int id, Role role);
-        Task<User> CreateUser(User user, Role role);
+        Task<bool> UserExists(string userName);
+        Task<bool> UserOwnsTest(int userId, int testId);
+        Task<User> GetUser(string username);
+        Task<User> GetUser(int id);
+        User CreateUser(User user);
+        Task<User> UpdateUser(User user);
+        Task<User> DeleteUser(User user);
+        Task<User> DeleteUser(int id);
+        Task<int> AddCredits(int id, int credits);
     }
 }

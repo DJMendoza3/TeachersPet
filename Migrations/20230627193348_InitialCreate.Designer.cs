@@ -11,7 +11,7 @@ using TeachersPet.Context;
 namespace TeachersPet.Migrations
 {
     [DbContext(typeof(SiteContext))]
-    [Migration("20230627174656_InitialCreate")]
+    [Migration("20230627193348_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -36,9 +36,6 @@ namespace TeachersPet.Migrations
                     b.Property<DateTime>("Start")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("TestId")
                         .HasColumnType("INTEGER");
 
@@ -48,8 +45,6 @@ namespace TeachersPet.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
 
                     b.HasIndex("TestId");
 
@@ -93,82 +88,14 @@ namespace TeachersPet.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("TeacherId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Faculty", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SchoolId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserRole")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
-
-                    b.ToTable("Faculty");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Grade", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("Grade");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Image", b =>
@@ -227,9 +154,6 @@ namespace TeachersPet.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Topic")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -242,37 +166,7 @@ namespace TeachersPet.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("TeacherId");
-
                     b.ToTable("Lessons");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Note", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("content")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("prompt")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Note");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Question", b =>
@@ -345,41 +239,6 @@ namespace TeachersPet.Migrations
                     b.ToTable("Schools");
                 });
 
-            modelBuilder.Entity("TeachersPet.Entities.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SchoolId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserRole")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
-
-                    b.ToTable("Students");
-                });
-
             modelBuilder.Entity("TeachersPet.Entities.Syllabus", b =>
                 {
                     b.Property<int>("Id")
@@ -397,9 +256,6 @@ namespace TeachersPet.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("prompt")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -412,47 +268,7 @@ namespace TeachersPet.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("TeacherId");
-
                     b.ToTable("Syllabus");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Teacher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<float>("Credits")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SchoolId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserRole")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
-
-                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Test", b =>
@@ -473,9 +289,6 @@ namespace TeachersPet.Migrations
                     b.Property<int>("SubjectId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("TestName")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -488,46 +301,54 @@ namespace TeachersPet.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tests");
                 });
 
-            modelBuilder.Entity("TeachersPet.Entities.TestResult", b =>
+            modelBuilder.Entity("TeachersPet.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Credits")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Result")
-                        .HasColumnType("REAL");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("StudentId")
+                    b.Property<int>("SchoolId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TestId")
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserRole")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("SchoolId");
 
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("TestResult");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.ActiveExam", b =>
@@ -537,10 +358,6 @@ namespace TeachersPet.Migrations
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("TeachersPet.Entities.Student", null)
-                        .WithMany("ActiveExams")
-                        .HasForeignKey("StudentId");
 
                     b.HasOne("TeachersPet.Entities.Test", "Test")
                         .WithMany()
@@ -562,39 +379,9 @@ namespace TeachersPet.Migrations
 
             modelBuilder.Entity("TeachersPet.Entities.Course", b =>
                 {
-                    b.HasOne("TeachersPet.Entities.Student", null)
+                    b.HasOne("TeachersPet.Entities.User", null)
                         .WithMany("Courses")
-                        .HasForeignKey("StudentId");
-
-                    b.HasOne("TeachersPet.Entities.Teacher", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("TeacherId");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Faculty", b =>
-                {
-                    b.HasOne("TeachersPet.Entities.School", "School")
-                        .WithMany("Faculty")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Grade", b =>
-                {
-                    b.HasOne("TeachersPet.Entities.Student", null)
-                        .WithMany("Grades")
-                        .HasForeignKey("StudentId");
-
-                    b.HasOne("TeachersPet.Entities.Test", "Test")
-                        .WithMany()
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Test");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Image", b =>
@@ -609,17 +396,6 @@ namespace TeachersPet.Migrations
                     b.HasOne("TeachersPet.Entities.Course", null)
                         .WithMany("Lessons")
                         .HasForeignKey("CourseId");
-
-                    b.HasOne("TeachersPet.Entities.Teacher", null)
-                        .WithMany("Lessons")
-                        .HasForeignKey("TeacherId");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Note", b =>
-                {
-                    b.HasOne("TeachersPet.Entities.Student", null)
-                        .WithMany("Notes")
-                        .HasForeignKey("StudentId");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Question", b =>
@@ -629,37 +405,11 @@ namespace TeachersPet.Migrations
                         .HasForeignKey("TestId");
                 });
 
-            modelBuilder.Entity("TeachersPet.Entities.Student", b =>
-                {
-                    b.HasOne("TeachersPet.Entities.School", "School")
-                        .WithMany("Students")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
             modelBuilder.Entity("TeachersPet.Entities.Syllabus", b =>
                 {
                     b.HasOne("TeachersPet.Entities.Course", null)
                         .WithMany("Syllabi")
                         .HasForeignKey("CourseId");
-
-                    b.HasOne("TeachersPet.Entities.Teacher", null)
-                        .WithMany("Syllabus")
-                        .HasForeignKey("TeacherId");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Teacher", b =>
-                {
-                    b.HasOne("TeachersPet.Entities.School", "School")
-                        .WithMany("Teachers")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Test", b =>
@@ -668,32 +418,20 @@ namespace TeachersPet.Migrations
                         .WithMany("Tests")
                         .HasForeignKey("CourseId");
 
-                    b.HasOne("TeachersPet.Entities.Teacher", null)
+                    b.HasOne("TeachersPet.Entities.User", null)
                         .WithMany("Tests")
-                        .HasForeignKey("TeacherId");
+                        .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("TeachersPet.Entities.TestResult", b =>
+            modelBuilder.Entity("TeachersPet.Entities.User", b =>
                 {
-                    b.HasOne("TeachersPet.Entities.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
+                    b.HasOne("TeachersPet.Entities.School", "School")
+                        .WithMany("Users")
+                        .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TeachersPet.Entities.Student", null)
-                        .WithMany("TestResults")
-                        .HasForeignKey("StudentId");
-
-                    b.HasOne("TeachersPet.Entities.Test", "Test")
-                        .WithMany()
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Test");
+                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Course", b =>
@@ -717,40 +455,19 @@ namespace TeachersPet.Migrations
 
             modelBuilder.Entity("TeachersPet.Entities.School", b =>
                 {
-                    b.Navigation("Faculty");
-
-                    b.Navigation("Students");
-
-                    b.Navigation("Teachers");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Student", b =>
-                {
-                    b.Navigation("ActiveExams");
-
-                    b.Navigation("Courses");
-
-                    b.Navigation("Grades");
-
-                    b.Navigation("Notes");
-
-                    b.Navigation("TestResults");
-                });
-
-            modelBuilder.Entity("TeachersPet.Entities.Teacher", b =>
-                {
-                    b.Navigation("Courses");
-
-                    b.Navigation("Lessons");
-
-                    b.Navigation("Syllabus");
-
-                    b.Navigation("Tests");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("TeachersPet.Entities.Test", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("TeachersPet.Entities.User", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Tests");
                 });
 #pragma warning restore 612, 618
         }
